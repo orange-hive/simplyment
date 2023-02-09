@@ -8,6 +8,7 @@ use OrangeHive\Simplyment\Registry\ContentElementRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
+use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;

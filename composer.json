@@ -3,6 +3,7 @@
     "description": "Simplified Development for TYPO3 developers",
     "type": "typo3-cms-extension",
     "version": "1.0.0",
+    "license": "GPL-2.0-or-later",
     "homepage": "https://technology.orangehive.de",
     "keywords": [
         "TYPO3 CMS",
@@ -15,7 +16,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "typo3/cms-core": "^11.5"
+        "typo3/cms-core": "^11.5||^12"
     },
     "suggest": {
         "typo3/cms-fluid-styled-content": "Required for custom content elements"

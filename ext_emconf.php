@@ -6,7 +6,8 @@ $EM_CONF[$_EXTKEY] = [
     'category' => 'be',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.5.99',
+            'php'   => '8.0.0-8.99.99',
+            'typo3' => '11.5.0-12.99.99',
         ],
         'conflicts' => [],
         'suggests' => [],
@@ -16,10 +17,10 @@ $EM_CONF[$_EXTKEY] = [
             'OrangeHive\\Simplyment\\' => 'Classes/',
         ],
     ],
-    'state' => 'beta',
+    'version' => '1.0.0',
+    'state' => 'stable',
     'clearCacheOnLoad' => true,
     'author' => 'Stefan Glotzbach',
     'author_email' => 's.glotzbach@orangehive.de',
     'author_company' => 'Orange Hive',
-    'version' => '1.0.0',
 ];
