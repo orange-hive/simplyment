@@ -1,0 +1,16 @@
+<?php
+
+use OrangeHive\Simplyment\Utility\ModelTcaUtility;
+
+
+$customColumnOverrides = [];
+ModelTcaUtility::addColumnTcaOverrides(
+    fqcn: ##FQCN##,
+    tableName: '##TABLE##',
+    columnOverrides: $customColumnOverrides
+);
+
+ModelTcaUtility::addColumnsToAllTcaTypes(
+    fqcn: ##FQCN##,
+    tableName: '##TABLE##'
+);

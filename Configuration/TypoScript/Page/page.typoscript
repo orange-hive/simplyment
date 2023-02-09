@@ -1,0 +1,17 @@
+page = PAGE
+page {
+    10 = FLUIDTEMPLATE
+    10 {
+        templateName < simplyment.page.resolveTemplateName
+
+        templateRootPaths {
+            0 = EXT:simplyment/Resources/Private/Templates/Page/
+        }
+        partialRootPaths {
+            0 = EXT:simplyment/Resources/Private/Partials/Page/
+        }
+        layoutRootPaths {
+            0 = EXT:simplyment/Resources/Private/Layouts/Page/
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<?php
+
+use OrangeHive\Simplyment\Utility\ModelTcaUtility;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+
+
+$base = ModelTcaUtility::getTca(##FQCN##);
+
+// override model TCA configuration
+$custom = [];
+
+
+ArrayUtility::mergeRecursiveWithOverrule($base, $custom);
+
+return $base;

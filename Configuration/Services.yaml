@@ -1,0 +1,7 @@
+services:
+  OrangeHive\Simplyment\Listener\DatabaseListener:
+    tags:
+      - name: event.listener
+        identifier: 'simplyment/databaseListener'
+        method: 'alterTableDefinitionStatements'
+        event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent

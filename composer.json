@@ -1,0 +1,33 @@
+{
+    "name": "orange-hive/simplyment",
+    "description": "Simplified Development for TYPO3 developers",
+    "type": "typo3-cms-extension",
+    "version": "1.0.0",
+    "homepage": "https://technology.orangehive.de",
+    "keywords": [
+        "TYPO3 CMS",
+        "Simplified Development",
+        "Backend layouts",
+        "Controller",
+        "Model",
+        "Hook",
+        "Custom content element"
+    ],
+    "require": {
+        "php": "^8.0",
+        "typo3/cms-core": "^11.5"
+    },
+    "suggest": {
+        "typo3/cms-fluid-styled-content": "Required for custom content elements"
+    },
+    "autoload": {
+        "psr-4": {
+            "OrangeHive\\Simplyment\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "simplyment"
+        }
+    }
+}
