@@ -11,6 +11,13 @@ class TcaFieldTypeEnum
 
     const CHECK = 'check';
 
+    const FILE = 'file';
+
+    // custom type based on type="file"
+    const FILE_IMAGE = 'file_image';
+
+    const FILE_MEDIA = 'file_media';
+
     const GROUP = 'group';
 
     const IMAGE_MANIPULATION = 'imageManipulation';

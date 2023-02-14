@@ -5,6 +5,7 @@ namespace OrangeHive\Simplyment\Attributes;
 use OrangeHive\Simplyment\Enumeration\TcaFieldTypeEnum;
 use OrangeHive\Simplyment\Utility\ClassNameUtility;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ReflectionService;
@@ -26,6 +27,8 @@ class TcaField
 
     public function getTca(string $fqcn = null, string $propertyName = null)
     {
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
         $availableTypes = TcaFieldTypeEnum::getAllValues();
 
         if (!in_array($this->type, $availableTypes)) {
@@ -79,6 +82,44 @@ TEXT,
             }
 
             ArrayUtility::mergeRecursiveWithOverrule($config, $inlineConfig);
+        } else if ($this->type === TcaFieldTypeEnum::FILE) {
+            if ($typo3Version->getMajorVersion() < 12) {
+                $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                        'files'
+                );
+
+                ArrayUtility::mergeRecursiveWithOverrule($config, $fileConfig);
+            }
+        } else if ($this->type === TcaFieldTypeEnum::FILE_IMAGE) {
+            if ($typo3Version->getMajorVersion() < 12) {
+                $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                    'image',
+                    [],
+                    $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+                );
+            } else {
+                $fileConfig = [
+                    'config' => TcaFieldTypeEnum::FILE,
+                    'allowed' => 'common-image-types',
+                ];
+            }
+
+            ArrayUtility::mergeRecursiveWithOverrule($config, $fileConfig);
+        } else if ($this->type === TcaFieldTypeEnum::FILE_MEDIA) {
+            if ($typo3Version->getMajorVersion() < 12) {
+                $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                    'media',
+                    [],
+                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext']
+                );
+            } else {
+                $fileConfig = [
+                    'config' => TcaFieldTypeEnum::FILE,
+                    'allowed' => 'common-media-types',
+                ];
+            }
+
+            ArrayUtility::mergeRecursiveWithOverrule($config, $fileConfig);
         }
 
 

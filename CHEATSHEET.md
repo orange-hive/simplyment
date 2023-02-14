@@ -180,8 +180,28 @@ class Page extends AbstractEntity
     type: TcaFieldTypeEnum::INLINE,
     targetClass: TestSubModel::class
 )]
-```
 protected ObjectStorage $subModels;
+```
+</details>
+
+<br />
+
+There are predefined types for referencing FAL files (TcaFieldTypeEnum::FILE) , images (TcaFieldTypeEnum::FILE_IMAGE) or media (TcaFieldTypeEnum::FILE_MEDIA).
+
+<details>
+  <summary>Example for referencing only images through FAL</summary>
+
+```php
+/**
+ * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+ */
+#[DatabaseField(sql: 'int')]
+#[TcaField(
+    label: 'My images',
+    type: TcaFieldTypeEnum::FILE_IMAGE
+)]
+protected ObjectStorage $images;
+```
 </details>
 
 <br />

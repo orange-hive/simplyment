@@ -51,7 +51,12 @@ class DatabaseField
         if (is_null($this->default) || $this->nullable) {
             $sql .= ' DEFAULT NULL';
         } else {
-            $sql .= ' DEFAULT \'' . $this->default . '\'';
+            $defaultValue = $this->default;
+            if (empty($defaultValue) && ($this->type === 'int' || $this->type === 'bool')) {
+                $defaultValue = 0;
+            }
+
+            $sql .= ' DEFAULT \'' . $defaultValue . '\'';
         }
 
         if ($this->nullable) {

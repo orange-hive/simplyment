@@ -235,6 +235,24 @@ Per default the foreign_sortby is set to *sorting*.
 protected ObjectStorage $subModels;
 ```
 
+
+<br />
+There are predefined types for referencing FAL files (TcaFieldTypeEnum::FILE) , images (TcaFieldTypeEnum::FILE_IMAGE) or media (TcaFieldTypeEnum::FILE_MEDIA).
+
+Example for referencing only images through FAL:
+
+```php
+/**
+ * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+ */
+#[DatabaseField(sql: 'int')]
+#[TcaField(
+    label: 'My images',
+    type: TcaFieldTypeEnum::FILE_IMAGE
+)]
+protected ObjectStorage $images;
+```
+
 <br />
 
 ### Custom content elements
