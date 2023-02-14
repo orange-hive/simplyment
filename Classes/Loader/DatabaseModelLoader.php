@@ -166,7 +166,7 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
             if (!file_exists($tcaFilePath)) {
                 GeneralUtility::mkdir_deep($extTcaPath);
 
-                $content = BlueprintRenderer::render('TCA/CustomTable', [
+                $content = BlueprintRenderer::render('Configuration/TCA/CustomTable', [
                     'FQCN' => '\\' . $fqcn . '::class',
                 ]);
 
