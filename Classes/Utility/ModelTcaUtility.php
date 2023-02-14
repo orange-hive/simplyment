@@ -9,6 +9,8 @@ use OrangeHive\Simplyment\Tca\WorkspaceTcaInformation;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility as Typo3LocalizationUtility;
 
 class ModelTcaUtility
 {
@@ -16,6 +18,9 @@ class ModelTcaUtility
     public static function getTca(string $fqcn): array
     {
         $tableName = ClassNameUtility::getTableNameByFqcn($fqcn);
+        $extensionKey = ClassNameUtility::getExtensionKey($fqcn);
+        $translationFile = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf';
+        $tableTitle = $translationFile . ':' . $tableName;
 
         $tcaService = GeneralUtility::makeInstance(TcaService::class, $fqcn);
 
@@ -53,7 +58,7 @@ class ModelTcaUtility
 
         $overrideTca = [
             'ctrl' => [
-                'title' => $tableName,
+                'title' => $tableTitle,
                 'label' => $labelField,
                 'tstamp' => 'tstamp',
                 'crdate' => 'crdate',
