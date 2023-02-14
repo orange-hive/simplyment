@@ -37,6 +37,9 @@ class DatabaseField
 
         $sql = $this->type;
         switch ($this->type) {
+            case 'bool':
+                $sql = 'tinyint(1)';
+                break;
             case 'int':
                 $sql = 'int(11)';
                 break;
@@ -45,7 +48,7 @@ class DatabaseField
                 break;
         }
 
-        if (is_null($this->default)) {
+        if (is_null($this->default) || $this->nullable) {
             $sql .= ' DEFAULT NULL';
         } else {
             $sql .= ' DEFAULT \'' . $this->default . '\'';
