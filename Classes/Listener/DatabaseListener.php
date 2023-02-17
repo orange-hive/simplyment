@@ -24,6 +24,10 @@ class DatabaseListener
                 $indicesSql = $this->getIndicesSqlPart($data['indices']);
             }
 
+            if (empty($fieldsSql) && empty($indicesSql)) {
+                continue;
+            }
+
             if (!empty($indicesSql)) {
                 $indicesSql = ', ' . LF . $indicesSql;
             }
