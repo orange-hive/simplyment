@@ -4,7 +4,7 @@ namespace OrangeHive\Simplyment\Attributes;
 
 use OrangeHive\Simplyment\Registry\PluginRegistry;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class Plugin
 {
 
