@@ -2,6 +2,8 @@
 
 namespace OrangeHive\Simplyment\Utility;
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 class LocalizationUtility
 {
 
@@ -27,6 +29,19 @@ class LocalizationUtility
                 $fieldTca['label'] = $translationFile . ':' . $idPrefix . $field;
             }
         }
+    }
+
+    public static function keyExistsInLocallang(string $extensionKey, string $translationKey): bool
+    {
+        $locallangPath = ExtensionManagementUtility::extPath($extensionKey, '/Resources/Private/Language/locallang.xlf');
+
+        if (!file_exists($locallangPath)) {
+            return false;
+        }
+
+        $content = file_get_contents($locallangPath);
+
+        return (preg_match('/id=["\']' . $translationKey . '["\']/s', $content) > 0);
     }
 
 }

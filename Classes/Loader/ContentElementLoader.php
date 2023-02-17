@@ -6,6 +6,7 @@ use OrangeHive\Simplyment\Attributes\ContentElement;
 use OrangeHive\Simplyment\DataProcessing\ContentElementDataProcessor;
 use OrangeHive\Simplyment\Registry\ContentElementRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
+use OrangeHive\Simplyment\Utility\LocalizationUtility;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
@@ -85,12 +86,20 @@ class ContentElementLoader extends AbstractLoader
                 list($relativePosition, $relativeToField) = explode(':', $ceData['position']);
             }
 
+            $translationKeyPath = 'LLL:EXT:' . $extensionName . '/Resources/Private/Language/locallang.xlf:';
+            $ceTitleTranslationKey = 'content.element.' . $ceData['name'];
+            if (LocalizationUtility::keyExistsInLocallang($extensionName, $ceTitleTranslationKey)) {
+                $ceTitle = $translationKeyPath . $ceTitleTranslationKey;
+            } else {
+                $ceTitle = $ceData['name'];
+            }
+
             // add content element to tt_content selection
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
                 'tt_content',
                 'CType',
                 [
-                    $ceData['name'],
+                    $ceTitle,
                     $ceSignature,
                 ],
                 $relativeToField,
@@ -159,12 +168,22 @@ class ContentElementLoader extends AbstractLoader
                 ]
             );
 
+            $translationKeyPath = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:';
+            $ceTitleTranslationKey = 'content.element.' . $ceData['name'];
+            if (LocalizationUtility::keyExistsInLocallang($extensionKey, $ceTitleTranslationKey)) {
+                $ceTitle = $translationKeyPath . $ceTitleTranslationKey;
+            } else {
+                $ceTitle = $ceData['name'];
+            }
+
+            $ceDescriptionTranslationKey = $translationKeyPath . 'content.element.' . $ceData['name'] . '.description';
+            $ceDescription = ($ceData['description'] ?? $ceDescriptionTranslationKey);
 
             $data[$tab]['signatures'][] = $signature;
             $data[$tab]['items'][] = $signature . ' {
                 iconIdentifier = ' . $iconIdentifier . '
-                title = ' . $ceData['name'] . '
-                description = ' . ($ceData['description'] ?? '') . '
+                title = ' . $ceTitle . '
+                description = ' . $ceDescription . '
                 tt_content_defValues {
                     CType = ' . $signature . '
                 }
