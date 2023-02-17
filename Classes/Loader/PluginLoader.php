@@ -157,7 +157,6 @@ class PluginLoader implements LoaderInterface
     public static function configure(): void
     {
         foreach (PluginRegistry::list() as $pluginSignature => $pluginData) {
-            echo '<pre>'; var_dump($pluginData); echo '</pre>';
             $pluginName = $pluginData['pluginName'];
             $actions = [];
             $noCacheActions = [];
