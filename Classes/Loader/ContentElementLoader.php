@@ -8,16 +8,11 @@ use OrangeHive\Simplyment\Registry\ContentElementRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
-use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
-use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Core\Bootstrap;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class ContentElementLoader extends AbstractLoader
 {
@@ -58,9 +53,9 @@ class ContentElementLoader extends AbstractLoader
 
     public static function extTables(string $vendorName, string $extensionName): void
     {
-        self::registerWizardItems();
-        self::createTemplateFileIfNotExistent();
-        self::registerTemplates();
+        self::registerWizardItems($extensionName);
+        self::createTemplateFileIfNotExistent($extensionName);
+        self::registerTemplates($extensionName);
     }
 
     public static function classes(string $vendorName, string $extensionName): array
@@ -68,7 +63,7 @@ class ContentElementLoader extends AbstractLoader
         // get content element class mappings
         $mapping = [];
 
-        foreach (ContentElementRegistry::list() as $ceSignature => $ceData) {
+        foreach (ContentElementRegistry::listByExtensionKey($extensionName) as $ceSignature => $ceData) {
             $fqcn = $ceData['fqcn'];
 
             $mapping[$fqcn] = [
@@ -81,7 +76,7 @@ class ContentElementLoader extends AbstractLoader
 
     public static function tcaTtContentOverrides(string $vendorName, string $extensionName): void
     {
-        foreach (ContentElementRegistry::list() as $ceSignature => $ceData) {
+        foreach (ContentElementRegistry::listByExtensionKey($extensionName) as $ceSignature => $ceData) {
             $fqcn = $ceData['fqcn'];
             $relativeToField = '';
             $relativePosition = '';
@@ -119,7 +114,7 @@ class ContentElementLoader extends AbstractLoader
         }
     }
 
-    public static function registerWizardItems(): void
+    public static function registerWizardItems(string $extensionKey): void
     {
         $data = [];
 
@@ -131,7 +126,7 @@ class ContentElementLoader extends AbstractLoader
             returnFullPath: true
         );
 
-        foreach (ContentElementRegistry::list() as $signature => $ceData) {
+        foreach (ContentElementRegistry::listByExtensionKey($extensionKey) as $signature => $ceData) {
             if ($ceData['hideContentElement']) {
                 continue;
             }
@@ -188,7 +183,7 @@ mod.wizards.newContentElement.wizardItems.' . $tab . ' {
         }
     }
 
-    protected static function createTemplateFileIfNotExistent(): void
+    protected static function createTemplateFileIfNotExistent(string $extensionKey): void
     {
         $blueprintMappings = [
             [
@@ -203,7 +198,7 @@ mod.wizards.newContentElement.wizardItems.' . $tab . ' {
             ],
         ];
 
-        foreach (ContentElementRegistry::list() as $signature => $ceData) {
+        foreach (ContentElementRegistry::listByExtensionKey($extensionKey) as $signature => $ceData) {
             $extensionKey = $ceData['extensionKey'];
             $name = $ceData['name'];
 
@@ -227,13 +222,13 @@ mod.wizards.newContentElement.wizardItems.' . $tab . ' {
         }
     }
 
-    public static function registerTemplates()
+    public static function registerTemplates(string $extensionKey)
     {
         $ceDataProcessorFqcn = ContentElementDataProcessor::class;
 
         $typoScript = '';
         $pageTypoScript = '';
-        foreach (ContentElementRegistry::list() as $signature => $ceData) {
+        foreach (ContentElementRegistry::listByExtensionKey($extensionKey) as $signature => $ceData) {
             $extensionKey = $ceData['extensionKey'];
             $name = $ceData['name'];
 
