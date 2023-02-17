@@ -19,7 +19,10 @@ class DatabaseListener
                 $fieldsSql = $this->getFieldsSqlPart($data['fields']);
             }
 
-            $indicesSql = $this->getIndicesSqlPart($data['indices']);
+            $indicesSql = '';
+            if (array_key_exists('indices', $data)) {
+                $indicesSql = $this->getIndicesSqlPart($data['indices']);
+            }
 
             if (!empty($indicesSql)) {
                 $indicesSql = ', ' . LF . $indicesSql;
