@@ -6,6 +6,7 @@ use OrangeHive\Simplyment\Attributes\Plugin;
 use OrangeHive\Simplyment\Attributes\PluginAction;
 use OrangeHive\Simplyment\Cache\CustomCache;
 use OrangeHive\Simplyment\Registry\PluginRegistry;
+use OrangeHive\Simplyment\Utility\LocalizationUtility;
 use ReflectionClass;
 use ReflectionMethod;
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
@@ -75,10 +76,17 @@ class PluginLoader implements LoaderInterface
                 returnFullPath: true
             );
 
+            $extensionKey = $data['extensionKey'];
+
+            $pluginTitle = $pluginName;
+            if (LocalizationUtility::keyExistsInLocallang($extensionKey, 'plugin.' . $pluginName)) {
+                $pluginTitle = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:plugin.' . $pluginName;
+            }
+
             ExtensionUtility::registerPlugin(
                 extensionName: $data['extensionKey'],
                 pluginName: $pluginName,
-                pluginTitle: $data['description'],
+                pluginTitle: $pluginTitle,
                 pluginIcon: $data['iconPath'] ?? $defaultIcon
             );
         }
@@ -200,10 +208,26 @@ class PluginLoader implements LoaderInterface
                 ]
             );
 
+            $extensionKey = $pluginData['extensionKey'];
+
+            $pluginTitle = $pluginName;
+            if (LocalizationUtility::keyExistsInLocallang($extensionKey, 'plugin.' . $pluginName)) {
+                $pluginTitle = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:plugin.' . $pluginName;
+            }
+
+            $pluginDescription = ($pluginData['description'] ?? '');
+            if (
+                !empty($pluginDescription)
+                && LocalizationUtility::keyExistsInLocallang($extensionKey, 'plugin.' . $pluginName . '.description')
+            ) {
+                $pluginDescription = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:plugin.' . $pluginName . '.description';
+            }
+
+
             $pluginElements[] = $pluginSignature . ' {
                 iconIdentifier = ' . $iconIdentifier . '
-                title = ' . $pluginName . '
-                description = ' . ($pluginData['description'] ?? '') . '
+                title = ' . $pluginTitle . '
+                description = ' . $pluginDescription . '
                 tt_content_defValues {
                     CType = list
                     list_type = ' . $pluginSignature . '
