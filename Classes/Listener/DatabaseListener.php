@@ -14,7 +14,11 @@ class DatabaseListener
         $modelsSql = [];
 
         foreach (DatabaseModelRegistry::list() as $tableName => $data) {
-            $fieldsSql = $this->getFieldsSqlPart($data['fields']);
+            $fieldsSql = '';
+            if (array_key_exists('fields', $data)) {
+                $fieldsSql = $this->getFieldsSqlPart($data['fields']);
+            }
+
             $indicesSql = $this->getIndicesSqlPart($data['indices']);
 
             if (!empty($indicesSql)) {
