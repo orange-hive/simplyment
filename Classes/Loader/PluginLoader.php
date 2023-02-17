@@ -44,8 +44,12 @@ class PluginLoader implements LoaderInterface
             foreach ($classRef->getAttributes(Plugin::class) as $attribute) {
                 /** @var Plugin $instance */
                 $instance = $attribute->newInstance();
-                PluginRegistry::addExtensionKey($instance->name, $extensionKey);
-                PluginRegistry::addVendorName($instance->name, $vendorName);
+
+                PluginRegistry::addPluginInformation(
+                    extensionKey: $extensionKey,
+                    vendorName: $vendorName,
+                    plugin: $instance
+                );
             }
 
             foreach ($classRef->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
@@ -56,6 +60,7 @@ class PluginLoader implements LoaderInterface
                     $attributeInstance = $attribute->newInstance();
 
                     PluginRegistry::addAction(
+                        extensionKey: $extensionKey,
                         pluginName: $attributeInstance->pluginName,
                         controllerFqcn: $fqcn,
                         actionName: basename($method->name, 'Action'),
@@ -70,7 +75,9 @@ class PluginLoader implements LoaderInterface
 
     public static function register(): void
     {
-        foreach (PluginRegistry::list() as $pluginName => $data) {
+        foreach (PluginRegistry::list() as $pluginSignature => $data) {
+            $pluginName = $data['pluginName'];
+
             $defaultIcon = ExtensionManagementUtility::getExtensionIcon(
                 extensionPath: ExtensionManagementUtility::extPath('simplyment'),
                 returnFullPath: true
@@ -111,7 +118,8 @@ class PluginLoader implements LoaderInterface
             PluginRegistry::set(CustomCache::get($pluginRegistryCacheIdentifier));
         }
 
-        foreach (PluginRegistry::list() as $pluginName => $pluginData) {
+        foreach (PluginRegistry::list() as $pluginSignature => $pluginData) {
+            $pluginName = $pluginData['pluginName'];
             $extensionKey = $pluginData['extensionKey'];
 
             $flexFormPath = null;
@@ -148,7 +156,9 @@ class PluginLoader implements LoaderInterface
 
     public static function configure(): void
     {
-        foreach (PluginRegistry::list() as $pluginName => $pluginData) {
+        foreach (PluginRegistry::list() as $pluginSignature => $pluginData) {
+            echo '<pre>'; var_dump($pluginData); echo '</pre>';
+            $pluginName = $pluginData['pluginName'];
             $actions = [];
             $noCacheActions = [];
 
@@ -183,7 +193,9 @@ class PluginLoader implements LoaderInterface
             returnFullPath: true
         );
 
-        foreach (PluginRegistry::list() as $pluginName => $pluginData) {
+        foreach (PluginRegistry::list() as $pluginSignature => $pluginData) {
+            $pluginName = $pluginData['pluginName'];
+
             if ($pluginData['hideContentElement']) {
                 continue;
             }

@@ -19,8 +19,6 @@ class Plugin
         if (empty($this->description)) {
             $this->description = $this->name;
         }
-
-        PluginRegistry::addPluginInformation($name, $description, $iconPath, $flexFormPath, $hideContentElement);
     }
 
 }

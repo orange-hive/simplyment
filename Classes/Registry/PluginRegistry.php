@@ -3,6 +3,7 @@
 namespace OrangeHive\Simplyment\Registry;
 
 use JetBrains\PhpStorm\ArrayShape;
+use OrangeHive\Simplyment\Attributes\Plugin;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class PluginRegistry
@@ -10,61 +11,64 @@ class PluginRegistry
     use RegistryTrait;
 
     public static function addPluginInformation(
-        string  $pluginName,
-        string  $description,
-        ?string $iconPath = null,
-        ?string $flexFormPath = null,
-        bool    $hideContentElement = false
+        string $extensionKey,
+        string $vendorName,
+        Plugin $plugin
     ): void
     {
-        if (!array_key_exists($pluginName, self::$data)) {
-            self::$data[$pluginName] = [
+        $key = self::getKey($extensionKey, $plugin->name);
+
+        if (!array_key_exists($key, self::$data)) {
+            $pluginData = [
+                'pluginName' => $plugin->name,
+                'extensionKey' => $extensionKey,
+                'vendorName' => $vendorName,
                 'controllers' => [],
+                'description' => $plugin->description,
+                'iconPath' => $plugin->iconPath,
+                'hideContentElement' => $plugin->hideContentElement,
             ];
-        }
 
-        self::$data[$pluginName]['description'] = $description;
-        self::$data[$pluginName]['iconPath'] = $iconPath;
-        if (!is_null($flexFormPath)) {
-            self::$data[$pluginName]['flexForm'] = $flexFormPath;
+            if (!is_null($plugin->flexFormPath)) {
+                $pluginData['flexForm'] = $plugin->flexFormPath;
+            }
+
+            self::$data[$key] = $pluginData;
         }
-        self::$data[$pluginName]['hideContentElement'] = $hideContentElement;
     }
 
-    public static function addExtensionKey(string $pluginName, string $extensionKey): void
+    public static function addAction(
+        string $extensionKey,
+        string $pluginName,
+        string $controllerFqcn,
+        string $actionName,
+        bool   $noCache = false
+    ): void
     {
-        self::$data[$pluginName]['extensionKey'] = $extensionKey;
-    }
+        $key = self::getKey($extensionKey, $pluginName);
 
-    public static function addVendorName(string $pluginName, string $vendorName): void
-    {
-        self::$data[$pluginName]['vendorName'] = $vendorName;
-    }
-
-    public static function addAction(string $pluginName, string $controllerFqcn, string $actionName, bool $noCache = false): void
-    {
-        if (!array_key_exists($pluginName, self::$data)) {
-            self::$data[$pluginName] = [
-                'controllers' => [],
-                'description' => $pluginName,
-            ];
+        if (!array_key_exists($key, self::$data)) {
+            throw new \Exception(<<<TEXT
+No Plugin has been registered with the plugin name "{$pluginName}" in "{$extensionKey}".
+TEXT);
         }
 
-        if (!array_key_exists($controllerFqcn, self::$data[$pluginName]['controllers'])) {
-            self::$data[$pluginName]['controllers'][$controllerFqcn] = [
+        if (!array_key_exists($controllerFqcn, self::$data[$key]['controllers'])) {
+            self::$data[$key]['controllers'][$controllerFqcn] = [
                 'actions' => [],
                 'noCache' => [],
             ];
         }
 
-        self::$data[$pluginName]['controllers'][$controllerFqcn]['actions'][] = $actionName;
+        self::$data[$key]['controllers'][$controllerFqcn]['actions'][] = $actionName;
         if ($noCache) {
-            self::$data[$pluginName]['controllers'][$controllerFqcn]['noCache'][] = $actionName;
+            self::$data[$key]['controllers'][$controllerFqcn]['noCache'][] = $actionName;
         }
     }
 
     #[ArrayShape([
         'string' => [
+            'pluginName' => 'string',
             'description' => 'string',
             'iconPath' => 'string|null',
             'controllers' => [],
@@ -79,4 +83,8 @@ class PluginRegistry
         return self::$data;
     }
 
+    protected static function getKey(string $extensionKey, string $pluginName): string
+    {
+        return str_replace('_', '', $extensionKey) . '_' . mb_strtolower($pluginName);
+    }
 }
