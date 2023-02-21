@@ -11,13 +11,10 @@ use OrangeHive\Simplyment\Registry\DatabaseModelRegistry;
 use OrangeHive\Simplyment\Registry\TableOnStandardPagesRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
 use OrangeHive\Simplyment\Utility\ClassNameUtility;
+use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
-use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
-use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
 {
@@ -32,9 +29,6 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
             TableOnStandardPagesRegistry::set(Typo3Cache::get($tableOnStandardPagesRegistryCacheIdentifier));
             return;
         }
-
-        //DatabaseModelRegistry::clear();
-        //TableOnStandardPagesRegistry::clear();
 
         $extPath = GeneralUtility::getFileAbsFileName('EXT:' . $extensionKey . '/Classes/Domain/Model');
 
@@ -136,6 +130,25 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
         }
 
         return $mapping;
+    }
+
+    /** special handling for DatabaseModel with tableName = tt_content due to mix with ContentElementLoader */
+    public static function tcaTtContentOverrides(string $vendorName, string $extensionName): void
+    {
+        self::load($vendorName, $extensionName);
+
+        foreach (DatabaseModelRegistry::list() as $tableName => $data) {
+            if ($tableName !== 'tt_content') {
+                continue;
+            }
+
+            $customColumnOverrides = [];
+            ModelTcaUtility::addColumnTcaOverrides(
+                fqcn: $data['fqcn'],
+                tableName: $tableName,
+                columnOverrides: $customColumnOverrides
+            );
+        }
     }
 
     protected static function allowTablesOnStandardPages()
