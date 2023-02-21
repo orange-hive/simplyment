@@ -120,6 +120,26 @@ TEXT,
             }
 
             ArrayUtility::mergeRecursiveWithOverrule($config, $fileConfig);
+        } else if ($this->type === TcaFieldTypeEnum::SELECT && !is_null($this->targetClass)) {
+            $classRef = new \ReflectionClass($this->targetClass);
+
+            $foreignFieldName = 'uid';
+
+            foreach ($classRef->getProperties() as $property) {
+                if (!is_null($property->getType()) && $property->getType()->getName() === $fqcn) {
+                    $foreignFieldName = GeneralUtility::camelCaseToLowerCaseUnderscored($property->getName());
+                }
+            }
+
+            $selectConfig = [
+                'type' => TcaFieldTypeEnum::SELECT,
+                'foreign_table' => ClassNameUtility::getTableNameByFqcn($this->targetClass),
+                'foreign_field' => $foreignFieldName,
+                'foreign_sortby' => 'sorting',
+                'renderType' => 'selectSingle',
+            ];
+
+            ArrayUtility::mergeRecursiveWithOverrule($config, $selectConfig);
         }
 
 
