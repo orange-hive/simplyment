@@ -4,4 +4,4 @@ $mapping = \OrangeHive\Simplyment\Loader::classes('##VENDOR_NAME##', '##EXTENSIO
 
 $custom = [];
 
-return array_merge($mapping, $custom);
+return array_replace_recursive($mapping, $custom);
