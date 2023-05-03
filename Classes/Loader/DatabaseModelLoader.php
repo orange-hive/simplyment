@@ -37,9 +37,11 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
             glob($extPath . '/Content/*.php')
         );
         foreach ($files as $file) {
-            $className = basename($file, '.php');
-
             $fqcn = ClassNameUtility::getFqcnFromPath(vendorName: $vendorName, extensionKey: $extensionKey, path: $file);
+
+            if (is_null($fqcn)) {
+                continue;
+            }
 
             $classRef = new ReflectionClass($fqcn);
 
@@ -138,7 +140,7 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
         self::load($vendorName, $extensionName);
 
         foreach (DatabaseModelRegistry::list() as $tableName => $data) {
-            if ($tableName !== 'tt_content') {
+            if ($tableName !== 'tt_content' || is_null($data['fqcn'])) {
                 continue;
             }
 
