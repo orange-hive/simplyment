@@ -374,6 +374,35 @@ Both files are created with dummy content automatically by Simplyment on cache c
 
 <br />
 
+#### Adding FlexForm to your custom content element
+FlexForms can be easily added to your custom content element using the **flexFormPath** property in the **ContentElement** PHP attribute.
+The value of this property has to be a string starting with *EXT:* and defining the path to your FlexForm XML file.
+If no FlexForm has been defined Simplyment tries to find a FlexForm file in the location *EXT:my_extension/Configuration/FlexForms/Content/MyContentElementName.xml* and adds this automatically.
+
+The FlexForm wil be added automatically at the end of your columns. You can specify the position in your Model by defining the property *pi_flexform* in the following way:
+```php
+#[TcaField(
+    type: TcaFieldTypeEnum::FLEX
+)]
+protected string $piFlexform = '';
+```
+
+For retrieving the content of the FlexForm in your Fluid template add a getter in your content element model with the following code: 
+```php
+public function getPiFlexform(): array
+{
+    return \OrangeHive\Simplyment\Utility\FlexFormUtility::xml2array((string)$this->piFlexform);
+}
+```
+
+For using this functionality add the following code to the file *TCA/Overrides/tt_content.php* in your extension:
+```php
+\OrangeHive\Simplyment\Loader::tcaTtContentOverrides('MyVendorName', 'my_extension_key');
+```
+
+<br />
+
+
 ### Hooks
 Loader: HookLoader\
 \

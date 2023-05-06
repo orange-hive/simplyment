@@ -18,6 +18,8 @@ class TcaFieldTypeEnum
 
     const FILE_MEDIA = 'file_media';
 
+    const FLEX = 'flex';
+
     const GROUP = 'group';
 
     const IMAGE_MANIPULATION = 'imageManipulation';

@@ -12,6 +12,7 @@ class ContentElementRegistry
         string  $fqcn,
         string  $tab = 'common',
         ?string $position = null,
+        ?string $flexFormPath = null,
         ?string $icon = null,
         ?bool   $hideContentElement = false
     )
@@ -24,6 +25,7 @@ class ContentElementRegistry
             'fqcn' => $fqcn,
             'tab' => $tab,
             'position' => $position,
+            'flexForm' => $flexFormPath,
             'icon' => $icon,
             'hideContentElement' => $hideContentElement,
         ];

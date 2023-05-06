@@ -40,6 +40,7 @@ class ContentElementLoader extends AbstractLoader
                     extensionKey: $extensionKey,
                     fqcn: $fqcn,
                     position: $attributeInstance->position,
+                    flexFormPath: $attributeInstance->flexFormPath,
                     icon: $attributeInstance->iconPath,
                     hideContentElement: $attributeInstance->hideContentElement
                 );
@@ -82,6 +83,7 @@ class ContentElementLoader extends AbstractLoader
             $relativeToField = '';
             $relativePosition = '';
 
+
             if (!is_null($ceData['position'])) {
                 list($relativePosition, $relativeToField) = explode(':', $ceData['position']);
             }
@@ -117,8 +119,13 @@ class ContentElementLoader extends AbstractLoader
 
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_content', $modelColumnsTca);
 
+
+            // flexform registration
+            $hasFlexForm = self::registerFlexForm(extensionKey: $extensionName, ceSignature: $ceSignature, ceData: $ceData);
+
+
             // register content element as tt_content type
-            $contentTca = ModelTcaUtility::getContentElementTca($fqcn);
+            $contentTca = ModelTcaUtility::getContentElementTca(fqcn: $fqcn, hasFlexForm: $hasFlexForm);
             $GLOBALS['TCA']['tt_content']['types'][$ceSignature] = $contentTca;
         }
     }
@@ -275,6 +282,37 @@ TEXT;
 
         ExtensionManagementUtility::addTypoScriptSetup($typoScript);
         ExtensionManagementUtility::addPageTSConfig($pageTypoScript);
+    }
+
+    protected static function registerFlexForm(string $extensionKey, string $ceSignature, array $ceData): bool
+    {
+        $flexFormPath = null;
+        if (array_key_exists('flexForm', $ceData) && !empty($ceData['flexForm'])) {
+            $flexFormPath = $ceData['flexForm'];
+        } else {
+            // try to load from default directory
+            $filePathInExtension = 'Configuration/FlexForms/Content/' . $ceData['name'] . '.xml';
+
+            $defaultPath = ExtensionManagementUtility::extPath($extensionKey)
+                . $filePathInExtension;
+
+            if (file_exists($defaultPath)) {
+                $flexFormPath = 'EXT:' . $extensionKey . '/' . $filePathInExtension;
+            }
+        }
+
+        if (!is_null($flexFormPath)) {
+            if (strpos($flexFormPath, 'EXT:') === 0) {
+                $flexFormPath = 'FILE:' . $flexFormPath;
+            }
+            ExtensionManagementUtility::addPiFlexFormValue(
+                '*',
+                $flexFormPath,
+                $ceSignature
+            );
+        }
+
+        return !is_null($flexFormPath);
     }
 
 }

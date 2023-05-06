@@ -148,7 +148,7 @@ class ModelTcaUtility
         return $modelColumns;
     }
 
-    public static function getContentElementTca(string $fqcn): array
+    public static function getContentElementTca(string $fqcn, bool $hasFlexForm = false): array
     {
         $tcaService = GeneralUtility::makeInstance(TcaService::class, $fqcn);
 
@@ -156,6 +156,9 @@ class ModelTcaUtility
         LocalizationUtility::addLocalizationLabel($fqcn, $modelColumns, 'tt_content');
 
         $customFields = array_keys($modelColumns);
+        if ($hasFlexForm & !in_array('pi_flexform', $customFields)) {
+            $customFields[] = 'pi_flexform';
+        }
 
         $showItems = array_merge(
             [
@@ -185,8 +188,8 @@ class ModelTcaUtility
 
         $columnsOverrides = [];
         foreach ($modelColumns as $propertyName => $columnTca) {
-            // skip model columns without TCA information
-            if (is_null($columnTca)) {
+            // skip model columns without TCA information or if property name is pi_flexform
+            if (is_null($columnTca) || $propertyName == 'pi_flexform') {
                 continue;
             }
 
