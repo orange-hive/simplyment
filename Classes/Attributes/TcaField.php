@@ -85,7 +85,12 @@ TEXT,
         } else if ($this->type === TcaFieldTypeEnum::FILE) {
             if ($typo3Version->getMajorVersion() < 12) {
                 $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                        'files'
+                    'files',
+                    [
+                        'foreign_match_fields' => [
+                            'fieldname' => GeneralUtility::camelCaseToLowerCaseUnderscored($propertyName),
+                        ],
+                    ]
                 );
 
                 ArrayUtility::mergeRecursiveWithOverrule($config, $fileConfig);
@@ -94,7 +99,11 @@ TEXT,
             if ($typo3Version->getMajorVersion() < 12) {
                 $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                     'image',
-                    [],
+                    [
+                        'foreign_match_fields' => [
+                            'fieldname' => GeneralUtility::camelCaseToLowerCaseUnderscored($propertyName),
+                        ],
+                    ],
                     $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
                 );
             } else {
@@ -109,7 +118,11 @@ TEXT,
             if ($typo3Version->getMajorVersion() < 12) {
                 $fileConfig = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                     'media',
-                    [],
+                    [
+                        'foreign_match_fields' => [
+                            'fieldname' => GeneralUtility::camelCaseToLowerCaseUnderscored($propertyName),
+                        ],
+                    ],
                     $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext']
                 );
             } else {

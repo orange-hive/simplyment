@@ -54,7 +54,7 @@ class TcaService
 
                 $tca = $fieldInstance->getTca(
                     fqcn: $this->fqcn,
-                    propertyName: $field->getName(),
+                    propertyName: $property->getName(),
                 );
 
                 $tca['_hasDatabaseFieldAttribute'] = count($property->getAttributes(DatabaseField::class)) > 0;
