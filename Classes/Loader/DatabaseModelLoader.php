@@ -24,9 +24,15 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
         $databaseModelRegistryCacheIdentifier = Typo3Cache::createIdentifier(DatabaseModelRegistry::class, $vendorName, $extensionKey);
         $tableOnStandardPagesRegistryCacheIdentifier = Typo3Cache::createIdentifier(TableOnStandardPagesRegistry::class, $vendorName, $extensionKey);
 
-        if (Typo3Cache::has($databaseModelRegistryCacheIdentifier) && Typo3Cache::has($tableOnStandardPagesRegistryCacheIdentifier)) {
-            DatabaseModelRegistry::set(Typo3Cache::get($databaseModelRegistryCacheIdentifier));
-            TableOnStandardPagesRegistry::set(Typo3Cache::get($tableOnStandardPagesRegistryCacheIdentifier));
+        $databaseModelRegistryCacheData = Typo3Cache::get($databaseModelRegistryCacheIdentifier);
+        $tableOnStandardPagesRegistryCacheData = Typo3Cache::get($tableOnStandardPagesRegistryCacheIdentifier);
+
+        if (
+            is_array($databaseModelRegistryCacheData)
+            && is_array($tableOnStandardPagesRegistryCacheData)
+        ) {
+            DatabaseModelRegistry::set($databaseModelRegistryCacheData);
+            TableOnStandardPagesRegistry::set($tableOnStandardPagesRegistryCacheData);
             return;
         }
 

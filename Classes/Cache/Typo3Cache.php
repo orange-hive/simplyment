@@ -32,7 +32,9 @@ class Typo3Cache extends AbstractCache
         $cm = self::getCacheManager();
 
         if (!$cm->hasCache(self::CACHE_IDENTIFIER)) {
-            $backend = new SimpleFileBackend(getenv('TYPO3_CONTEXT') ?? 'production');
+            $backend = new SimpleFileBackend(getenv('TYPO3_CONTEXT') ?? 'production', [
+                'defaultLifetime' => 0, // set lifetime to 0 - only clear on manual cache clear
+            ]);
             $frontendCache = new VariableFrontend('simplyment', $backend);
 
             $cm->registerCache($frontendCache);

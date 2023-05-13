@@ -66,8 +66,10 @@ class BackendLayoutDataProvider implements DataProviderInterface
     {
         $backendLayoutRegistryIdentifier = Typo3Cache::createIdentifier(BackendLayoutRegistry::class);
 
-        if(Typo3Cache::has($backendLayoutRegistryIdentifier)) {
-            BackendLayoutRegistry::set(Typo3Cache::get($backendLayoutRegistryIdentifier));
+        $backendLayoutRegistryData = Typo3Cache::get($backendLayoutRegistryIdentifier);
+
+        if (is_array($backendLayoutRegistryData)) {
+            BackendLayoutRegistry::set($backendLayoutRegistryData);
             return;
         }
 
