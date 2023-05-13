@@ -6,12 +6,10 @@ use OrangeHive\Simplyment\Attributes\ContentElement;
 use OrangeHive\Simplyment\DataProcessing\ContentElementDataProcessor;
 use OrangeHive\Simplyment\Registry\ContentElementRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
+use OrangeHive\Simplyment\Utility\IconUtility;
 use OrangeHive\Simplyment\Utility\LocalizationUtility;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
-use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -96,6 +94,8 @@ class ContentElementLoader extends AbstractLoader
                 $ceTitle = $ceData['name'];
             }
 
+            $iconIdentifier = IconUtility::getIconIdentifierBySignature($ceSignature, $ceData['icon']);
+
             // add content element to tt_content selection
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
                 'tt_content',
@@ -103,6 +103,7 @@ class ContentElementLoader extends AbstractLoader
                 [
                     $ceTitle,
                     $ceSignature,
+                    $iconIdentifier
                 ],
                 $relativeToField,
                 $relativePosition
@@ -127,20 +128,15 @@ class ContentElementLoader extends AbstractLoader
             // register content element as tt_content type
             $contentTca = ModelTcaUtility::getContentElementTca(fqcn: $fqcn, hasFlexForm: $hasFlexForm);
             $GLOBALS['TCA']['tt_content']['types'][$ceSignature] = $contentTca;
+
+            // add icon for content element in backend rendering
+            $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes'][$ceSignature] = $iconIdentifier;
         }
     }
 
     public static function registerWizardItems(string $extensionKey): void
     {
         $data = [];
-
-        /** @var IconRegistry $iconRegistry */
-        $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
-
-        $defaultIcon = ExtensionManagementUtility::getExtensionIcon(
-            extensionPath: ExtensionManagementUtility::extPath('simplyment'),
-            returnFullPath: true
-        );
 
         foreach (ContentElementRegistry::listByExtensionKey($extensionKey) as $signature => $ceData) {
             if ($ceData['hideContentElement']) {
@@ -156,24 +152,7 @@ class ContentElementLoader extends AbstractLoader
                 ];
             }
 
-
-
-            // register icon
-            $iconIdentifier = 'ce-icon-' . $signature;
-            $iconPath = $ceData['iconPath'] ?? $defaultIcon;
-
-            $iconProvider = BitmapIconProvider::class;
-            if (mb_substr(mb_strtolower($iconPath), -3) === 'svg') {
-                $iconProvider = SvgIconProvider::class;
-            }
-
-            $iconRegistry->registerIcon(
-                $iconIdentifier,
-                $iconProvider,
-                [
-                    'source' => $iconPath,
-                ]
-            );
+            $iconIdentifier = IconUtility::getIconIdentifierBySignature($signature, $ceData['icon']);
 
             $translationKeyPath = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:';
             $ceTitleTranslationKey = 'content.element.' . $ceData['name'];
