@@ -6,7 +6,7 @@ use OrangeHive\Simplyment\Attributes\ContentElement;
 use OrangeHive\Simplyment\Attributes\DatabaseField;
 use OrangeHive\Simplyment\Attributes\DatabaseTable;
 use OrangeHive\Simplyment\Attributes\Tca;
-use OrangeHive\Simplyment\Cache\Typo3Cache;
+use OrangeHive\Simplyment\Cache\CustomCache;
 use OrangeHive\Simplyment\Registry\DatabaseModelRegistry;
 use OrangeHive\Simplyment\Registry\TableOnStandardPagesRegistry;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
@@ -21,11 +21,11 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
 
     public static function load(string $vendorName, string $extensionKey): void
     {
-        $databaseModelRegistryCacheIdentifier = Typo3Cache::createIdentifier(DatabaseModelRegistry::class, $vendorName, $extensionKey);
-        $tableOnStandardPagesRegistryCacheIdentifier = Typo3Cache::createIdentifier(TableOnStandardPagesRegistry::class, $vendorName, $extensionKey);
+        $databaseModelRegistryCacheIdentifier = CustomCache::createIdentifier(DatabaseModelRegistry::class, $vendorName, $extensionKey);
+        $tableOnStandardPagesRegistryCacheIdentifier = CustomCache::createIdentifier(TableOnStandardPagesRegistry::class, $vendorName, $extensionKey);
 
-        $databaseModelRegistryCacheData = Typo3Cache::get($databaseModelRegistryCacheIdentifier);
-        $tableOnStandardPagesRegistryCacheData = Typo3Cache::get($tableOnStandardPagesRegistryCacheIdentifier);
+        $databaseModelRegistryCacheData = CustomCache::get($databaseModelRegistryCacheIdentifier);
+        $tableOnStandardPagesRegistryCacheData = CustomCache::get($tableOnStandardPagesRegistryCacheIdentifier);
 
         if (
             is_array($databaseModelRegistryCacheData)
@@ -104,8 +104,8 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
             }
         }
 
-        Typo3Cache::set($databaseModelRegistryCacheIdentifier, DatabaseModelRegistry::list());
-        Typo3Cache::set($tableOnStandardPagesRegistryCacheIdentifier, TableOnStandardPagesRegistry::list());
+        CustomCache::set($databaseModelRegistryCacheIdentifier, DatabaseModelRegistry::list());
+        CustomCache::set($tableOnStandardPagesRegistryCacheIdentifier, TableOnStandardPagesRegistry::list());
     }
 
 

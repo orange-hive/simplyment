@@ -3,7 +3,7 @@
 namespace OrangeHive\Simplyment\Loader;
 
 use OrangeHive\Simplyment\Attributes\Hook;
-use OrangeHive\Simplyment\Cache\Typo3Cache;
+use OrangeHive\Simplyment\Cache\CustomCache;
 use OrangeHive\Simplyment\Registry\HookRegistry;
 use ReflectionClass;
 use ReflectionMethod;

@@ -2,7 +2,7 @@
 
 namespace OrangeHive\Simplyment\Loader;
 
-use OrangeHive\Simplyment\Cache\Typo3Cache;
+use OrangeHive\Simplyment\Cache\CustomCache;
 use OrangeHive\Simplyment\Registry\BackendLayoutRegistry;
 use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -13,7 +13,7 @@ class BackendLayoutLoader implements LoaderInterface
 
     public static function load(string $vendorName, string $extensionKey): void
     {
-        if (Typo3Cache::exists(Typo3Cache::createIdentifier(BackendLayoutRegistry::class))) {
+        if (CustomCache::exists(CustomCache::createIdentifier(BackendLayoutRegistry::class))) {
             return;
         }
 

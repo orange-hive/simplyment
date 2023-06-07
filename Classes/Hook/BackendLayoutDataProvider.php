@@ -2,7 +2,7 @@
 
 namespace OrangeHive\Simplyment\Hook;
 
-use OrangeHive\Simplyment\Cache\Typo3Cache;
+use OrangeHive\Simplyment\Cache\CustomCache;
 use OrangeHive\Simplyment\Registry\BackendLayoutRegistry;
 use TYPO3\CMS\Backend\View\BackendLayout\BackendLayout;
 use TYPO3\CMS\Backend\View\BackendLayout\BackendLayoutCollection;
@@ -64,16 +64,16 @@ class BackendLayoutDataProvider implements DataProviderInterface
 
     protected function loadFromCache()
     {
-        $backendLayoutRegistryIdentifier = Typo3Cache::createIdentifier(BackendLayoutRegistry::class);
+        $backendLayoutRegistryIdentifier = CustomCache::createIdentifier(BackendLayoutRegistry::class);
 
-        $backendLayoutRegistryData = Typo3Cache::get($backendLayoutRegistryIdentifier);
+        $backendLayoutRegistryData = CustomCache::get($backendLayoutRegistryIdentifier);
 
         if (is_array($backendLayoutRegistryData)) {
             BackendLayoutRegistry::set($backendLayoutRegistryData);
             return;
         }
 
-        Typo3Cache::set($backendLayoutRegistryIdentifier, BackendLayoutRegistry::list());
+        CustomCache::set($backendLayoutRegistryIdentifier, BackendLayoutRegistry::list());
     }
 
     /**
