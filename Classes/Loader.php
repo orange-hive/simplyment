@@ -8,6 +8,7 @@ use OrangeHive\Simplyment\Loader\DatabaseModelLoader;
 use OrangeHive\Simplyment\Loader\HookLoader;
 use OrangeHive\Simplyment\Loader\PluginLoader;
 use OrangeHive\Simplyment\Renderer\BlueprintRenderer;
+use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;

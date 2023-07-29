@@ -14,6 +14,13 @@ class ClassNameUtility
         return GeneralUtility::camelCaseToLowerCaseUnderscored($extension);
     }
 
+    public static function getVendorName(string $fqcn)
+    {
+        list($vendorName) = explode('\\', $fqcn);
+
+        return $vendorName;
+    }
+
     public static function getFqcnFromPath(string $vendorName, string $extensionKey, string $path)
     {
         $pathInExtension = substr($path, stripos($path, $extensionKey) + strlen($extensionKey) + strlen('/Classes') + 1);

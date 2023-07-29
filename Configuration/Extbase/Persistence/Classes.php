@@ -1,7 +1,20 @@
 <?php
 
-$mapping = \OrangeHive\Simplyment\Loader::classes('OrangeHive', 'simplyment');
 
-$custom = [];
+use OrangeHive\Simplyment\Cache\CustomCache;
+use OrangeHive\Simplyment\Registry\SimplymentExtensionRegistry;
 
-return array_merge($mapping, $custom);
+
+$mapping = [];
+if (CustomCache::has(SimplymentExtensionRegistry::CACHE_IDENTIFIER)) {
+    $extensions = CustomCache::get(SimplymentExtensionRegistry::CACHE_IDENTIFIER);
+
+    foreach ($extensions as $extension) {
+        $mapping = array_merge($mapping, \OrangeHive\Simplyment\Loader::classes($extension['vendor'], $extension['extensionKey']));
+    }
+}
+
+$simplymentMapping = \OrangeHive\Simplyment\Loader::classes('OrangeHive', 'simplyment');
+
+
+return array_merge($mapping, $simplymentMapping);

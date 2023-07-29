@@ -21,15 +21,25 @@ using the following code for *templateName*:
 templateName < simplyment.page.resolveTemplateName
 ```
 
-Add the following code in your extension:
-  - file: ext_localconf.php
+Add the following code in your extension - that's all!:
+  - file Configuration/Services.yaml
+```yaml
+services:
+  MyVendorName\MyExtensionKey:
+    tags:
+      - name: simplyment
+```
+
+
+*Alternatively you can skip the registration in Configuration/Services.yaml and manually register your extension for usage with Simplyment:*
+  - *file: ext_localconf.php*
 ```php
 \OrangeHive\Simplyment\Loader::extLocalconf(
   vendorName: 'MyVendorName',
   extensionName: 'my_extension_key'
 );
 ```
-  - file: ext_tables.php
+  - *file: ext_tables.php*
 ```php
 \OrangeHive\Simplyment\Loader::extTables(
   vendorName: 'MyVendorName',
@@ -37,8 +47,8 @@ Add the following code in your extension:
 );
 ```
 
-As a third argument you could add *loaders* as an array containing the loaders you want to use. 
-If no loaders are defined all loaders will be used. 
+*As a third argument you could add *loaders* as an array containing the loaders you want to use. 
+If no loaders are defined all loaders will be used.*
 
 ## Usage
 
