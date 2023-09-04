@@ -15,7 +15,18 @@ class CustomCache extends AbstractCache
 
     public static function get(string $identifier)
     {
-        return unserialize(file_get_contents(self::getCachePath($identifier)));
+        $path = self::getCachePath($identifier);
+        if (!file_exists($path)) {
+            return null;
+        }
+
+        $content = file_get_contents($path);
+
+        if (!is_string($content)) {
+            return null;
+        }
+
+        return unserialize($content);
     }
 
     public static function set(string $identifier, string|array $data): void
