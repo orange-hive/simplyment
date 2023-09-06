@@ -108,7 +108,7 @@ TEXT,
                 );
             } else {
                 $fileConfig = [
-                    'config' => TcaFieldTypeEnum::FILE,
+                    'type' => TcaFieldTypeEnum::FILE,
                     'allowed' => 'common-image-types',
                 ];
             }
@@ -127,7 +127,7 @@ TEXT,
                 );
             } else {
                 $fileConfig = [
-                    'config' => TcaFieldTypeEnum::FILE,
+                    'type' => TcaFieldTypeEnum::FILE,
                     'allowed' => 'common-media-types',
                 ];
             }
