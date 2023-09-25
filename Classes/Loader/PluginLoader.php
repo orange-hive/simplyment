@@ -199,7 +199,7 @@ class PluginLoader implements LoaderInterface
                 continue;
             }
 
-            $pluginSignature = str_replace('_', '', $pluginData['extensionKey']) . '_' . mb_strtolower($pluginName);
+            $pluginSignature = str_replace('_', '', $pluginData['extensionKey']) . '-' . mb_strtolower($pluginName);
             $pluginSignatures[] = $pluginSignature;
 
             // register icon
