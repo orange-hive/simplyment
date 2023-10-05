@@ -49,13 +49,13 @@ class ContentElementLoader extends AbstractLoader
     public static function extLocalconf(string $vendorName, string $extensionName): void
     {
         self::load($vendorName, $extensionName);
+        self::registerTemplates($extensionName);
+        self::createTemplateFileIfNotExistent($extensionName);
     }
 
     public static function extTables(string $vendorName, string $extensionName): void
     {
         self::registerWizardItems($extensionName);
-        self::createTemplateFileIfNotExistent($extensionName);
-        self::registerTemplates($extensionName);
     }
 
     public static function classes(string $vendorName, string $extensionName): array
