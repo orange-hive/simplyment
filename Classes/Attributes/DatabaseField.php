@@ -59,8 +59,8 @@ class DatabaseField
             $sql .= ' DEFAULT \'' . $defaultValue . '\'';
         }
 
-        if ($this->nullable) {
-            $sql .= ' NOT NULL';
+        if(!$this->nullable) {
+            $sql .= " NOT NULL";
         }
 
         return $sql;
