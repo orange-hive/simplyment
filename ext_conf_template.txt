@@ -1,0 +1,2 @@
+# cat=basic; type=options[pluginname_contentelementname=pluginname_contentelementname,plugin_name_content_element_name]; label=Content element signature type
+contentElementSignatureType = pluginname_contentelementname

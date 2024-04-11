@@ -2,6 +2,9 @@
 
 namespace OrangeHive\Simplyment\Registry;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class ContentElementRegistry
 {
     use RegistryTrait;
@@ -17,7 +20,20 @@ class ContentElementRegistry
         ?bool   $hideContentElement = false
     )
     {
-        $key = str_replace('_', '', $extensionKey) . '_' . mb_strtolower($name);
+        try {
+            /** @var ExtensionConfiguration $extensionConfiguration */
+            $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+
+            $signatureType = $extensionConfiguration->get('simplyment', 'contentElementSignatureType');
+
+            $key = match ($signatureType) {
+                'pluginname_contentelementname' => str_replace('_', '', $extensionKey) . '_' . mb_strtolower($name),
+                'plugin_name_content_element_name' => $extensionKey . '_' . GeneralUtility::camelCaseToLowerCaseUnderscored($name),
+            };
+
+        } catch (\Exception $exception) {
+            $key = str_replace('_', '', $extensionKey) . '_' . mb_strtolower($name);
+        }
 
         self::$data[$key] = [
             'name' => $name,
