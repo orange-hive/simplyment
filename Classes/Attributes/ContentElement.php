@@ -12,7 +12,8 @@ class ContentElement
         public ?string $iconPath = null,
         public ?string $flexFormPath = null,
         public ?string $position = null,
-        public bool $hideContentElement = false
+        public bool $hideContentElement = false,
+        public string $wizardTab = 'common',
     )
     {
     }

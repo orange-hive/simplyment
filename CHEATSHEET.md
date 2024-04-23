@@ -232,7 +232,8 @@ use OrangeHive\Simplyment\Enumeration\TcaFieldTypeEnum;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 #[ContentElement(
-    name: 'Teaser'
+    name: 'Teaser',
+    wizardTab: 'myCustom' 
 )]
 class Teaser extends AbstractEntity
 {
@@ -282,6 +283,11 @@ class Teaser extends AbstractEntity
 
 }
 ```
+
+Will render the content element in the wizardTab "myCustom". For setting translation of wizardTab add to locallang.xlf:
+
+    <trans-unit id="wizardTab.custom"><source>My custom tab</source></trans-unit>
+If not defined "common" tab is used.
 
 </details>
 

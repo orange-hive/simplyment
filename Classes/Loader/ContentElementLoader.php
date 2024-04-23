@@ -10,8 +10,15 @@ use OrangeHive\Simplyment\Utility\IconUtility;
 use OrangeHive\Simplyment\Utility\LocalizationUtility;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
+use TYPO3\CMS\Backend\Configuration\TypoScript\ConditionMatching\ConditionMatcher;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
+use TYPO3\CMS\Core\Configuration\Loader\PageTsConfigLoader;
+use TYPO3\CMS\Core\Configuration\Parser\PageTsConfigParser;
+use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class ContentElementLoader extends AbstractLoader
 {
@@ -37,6 +44,7 @@ class ContentElementLoader extends AbstractLoader
                     name: $attributeInstance->name,
                     extensionKey: $extensionKey,
                     fqcn: $fqcn,
+                    tab: $attributeInstance->wizardTab,
                     position: $attributeInstance->position,
                     flexFormPath: $attributeInstance->flexFormPath,
                     icon: $attributeInstance->iconPath,
@@ -137,6 +145,7 @@ class ContentElementLoader extends AbstractLoader
     public static function registerWizardItems(string $extensionKey): void
     {
         $data = [];
+        $translationKeyPath = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:';
 
         foreach (ContentElementRegistry::listByExtensionKey($extensionKey) as $signature => $ceData) {
             if ($ceData['hideContentElement']) {
@@ -154,7 +163,6 @@ class ContentElementLoader extends AbstractLoader
 
             $iconIdentifier = IconUtility::getIconIdentifierBySignature($signature, $ceData['icon']);
 
-            $translationKeyPath = 'LLL:EXT:' . $extensionKey . '/Resources/Private/Language/locallang.xlf:';
             $ceTitleTranslationKey = 'content.element.' . $ceData['name'];
             if (LocalizationUtility::keyExistsInLocallang($extensionKey, $ceTitleTranslationKey)) {
                 $ceTitle = $translationKeyPath . $ceTitleTranslationKey;
@@ -178,14 +186,41 @@ class ContentElementLoader extends AbstractLoader
 
 
         foreach ($data as $tab => $tabData) {
+            // set wizard tab header property if not existent, use from translation if defined
+            $headerTs = '';
+            if (!self::wizardTabHeaderExists($tab)) {
+                $ceTitleTranslationKey = 'wizardTab.' . $tab;
+                if (LocalizationUtility::keyExistsInLocallang($extensionKey, $ceTitleTranslationKey)) {
+                    $tabHeader = $translationKeyPath . $ceTitleTranslationKey;
+                } else {
+                    $tabHeader = $tab;
+                }
+
+                $headerTs = 'header = ' . $tabHeader;
+            }
+
             ExtensionManagementUtility::addPageTSConfig('
 mod.wizards.newContentElement.wizardItems.' . $tab . ' {
+  ' . $headerTs . '
   elements {
     ' . implode(LF, $tabData['items']). '
   }
   show:= addToList(' . implode(',', $tabData['signatures']) . ')
 }');
         }
+    }
+
+    protected static function wizardTabHeaderExists($tab): bool {
+        $loader = GeneralUtility::makeInstance(PageTsConfigLoader::class);
+        $tsConfigString = $loader->load([0]);
+
+        $typoScriptParser = GeneralUtility::makeInstance(TypoScriptParser::class);
+
+        $typoScriptParser->parse($tsConfigString);
+        $parsed = $typoScriptParser->setup;
+        $header = $typoScriptParser->getVal('mod.wizards.newContentElement.wizardItems.' . $tab . '.header', $parsed);
+
+        return (!empty($header[0]));
     }
 
     protected static function createTemplateFileIfNotExistent(string $extensionKey): void
