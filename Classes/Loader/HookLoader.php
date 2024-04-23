@@ -57,7 +57,13 @@ class HookLoader implements LoaderInterface
     protected static function register()
     {
         foreach (HookRegistry::list() as $hook) {
-            $hookSegments = explode('/', $hook['hookIdentifier']);
+            $hookSegmentsSeparator = '|';
+            if (stripos($hook['hookIdentifier'],'|') === false) {
+                // for backwards compatibility
+                $hookSegmentsSeparator = '/';
+            }
+
+            $hookSegments = explode($hookSegmentsSeparator, $hook['hookIdentifier']);
             $firstSegment = array_shift($hookSegments);
 
             // add key
