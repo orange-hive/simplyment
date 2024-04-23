@@ -2,6 +2,7 @@
 
 namespace OrangeHive\Simplyment\Utility;
 
+use OrangeHive\Simplyment\Renderer\ContentElementPreviewRenderer;
 use OrangeHive\Simplyment\Service\TcaService;
 use OrangeHive\Simplyment\Tca\EnableFieldsTcaInformation;
 use OrangeHive\Simplyment\Tca\LanguageTcaInformation;
@@ -200,6 +201,7 @@ class ModelTcaUtility
         $tca = [
             'showitem' => implode(',', $showItems),
             'columnsOverrides' => $columnsOverrides,
+            'previewRenderer' => ContentElementPreviewRenderer::class,
         ];
 
         return $tca;
