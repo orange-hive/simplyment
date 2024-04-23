@@ -10,15 +10,10 @@ use OrangeHive\Simplyment\Utility\IconUtility;
 use OrangeHive\Simplyment\Utility\LocalizationUtility;
 use OrangeHive\Simplyment\Utility\ModelTcaUtility;
 use ReflectionClass;
-use TYPO3\CMS\Backend\Configuration\TypoScript\ConditionMatching\ConditionMatcher;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Cache\Frontend\NullFrontend;
 use TYPO3\CMS\Core\Configuration\Loader\PageTsConfigLoader;
-use TYPO3\CMS\Core\Configuration\Parser\PageTsConfigParser;
 use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class ContentElementLoader extends AbstractLoader
 {
@@ -105,7 +100,7 @@ class ContentElementLoader extends AbstractLoader
             $iconIdentifier = IconUtility::getIconIdentifierBySignature($ceSignature, $ceData['icon']);
 
             // add content element to tt_content selection
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
+            ExtensionManagementUtility::addTcaSelectItem(
                 'tt_content',
                 'CType',
                 [
@@ -126,7 +121,7 @@ class ContentElementLoader extends AbstractLoader
                 return !in_array($key, $existentColumns);
             }, ARRAY_FILTER_USE_KEY);
 
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_content', $modelColumnsTca);
+            ExtensionManagementUtility::addTCAcolumns('tt_content', $modelColumnsTca);
 
 
             // flexform registration
