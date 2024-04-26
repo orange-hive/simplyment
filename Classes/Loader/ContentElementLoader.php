@@ -207,7 +207,7 @@ mod.wizards.newContentElement.wizardItems.' . $tab . ' {
 
     protected static function wizardTabHeaderExists($tab): bool {
         $loader = GeneralUtility::makeInstance(PageTsConfigLoader::class);
-        $tsConfigString = $loader->load([0]);
+        $tsConfigString = $loader->load([]);
 
         $typoScriptParser = GeneralUtility::makeInstance(TypoScriptParser::class);
 
