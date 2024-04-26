@@ -86,7 +86,7 @@ class ContentElementPreviewRenderer extends StandardContentPreviewRenderer
     protected function getTyposcript(int $pageUid): TemplateService
     {
         /** @var RootlineUtility $rootlineUtil */
-        $rootlineUtil = GeneralUtility::makeInstance(RootlineUtility::class, [$pageUid]);
+        $rootlineUtil = GeneralUtility::makeInstance(RootlineUtility::class, $pageUid);
         /** @var TemplateService $templateService */
         $templateService = GeneralUtility::makeInstance(TemplateService::class);
 
