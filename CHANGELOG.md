@@ -1,3 +1,6 @@
+# 1.3.2
+- Bugfix release
+
 # 1.3.1
 - Define wizard tab for Content Elements through *\OrangeHive\Simplyment\Attributes\ContentElement* PHP-Attribute
 - Use | in Hook registration through *\OrangeHive\Simplyment\Attributes\Hook* PHP-Attribute for segment separation
