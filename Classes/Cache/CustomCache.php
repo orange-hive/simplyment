@@ -39,4 +39,16 @@ class CustomCache extends AbstractCache
         file_put_contents(self::getCachePath($identifier), serialize($data));
     }
 
+    public static function flush(string $identifier = ''): void
+    {
+        $cachePath = self::getCachePath($identifier);
+        if (file_exists($cachePath)) {
+            if (is_dir($cachePath)) {
+                GeneralUtility::rmdir($cachePath, true);
+            } else {
+                unlink($cachePath);
+            }
+        }
+    }
+
 }

@@ -31,8 +31,8 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
             is_array($databaseModelRegistryCacheData)
             && is_array($tableOnStandardPagesRegistryCacheData)
         ) {
-            DatabaseModelRegistry::set($databaseModelRegistryCacheData);
-            TableOnStandardPagesRegistry::set($tableOnStandardPagesRegistryCacheData);
+            DatabaseModelRegistry::set($databaseModelRegistryCacheData, true);
+            TableOnStandardPagesRegistry::set($tableOnStandardPagesRegistryCacheData, true);
             return;
         }
 

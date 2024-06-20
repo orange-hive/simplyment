@@ -27,7 +27,7 @@ class PluginLoader implements LoaderInterface
         $pluginRegistryCacheIdentifier = 'PluginRegistry_' . $vendorName . '_' . $extensionKey;
 
         if (CustomCache::has($pluginRegistryCacheIdentifier)) {
-            PluginRegistry::set(CustomCache::get($pluginRegistryCacheIdentifier));
+            PluginRegistry::set(CustomCache::get($pluginRegistryCacheIdentifier), true);
             return;
         }
 
@@ -115,7 +115,7 @@ class PluginLoader implements LoaderInterface
         $pluginRegistryCacheIdentifier = 'PluginRegistry_' . $vendorName . '_' . $extensionName;
 
         if (CustomCache::has($pluginRegistryCacheIdentifier)) {
-            PluginRegistry::set(CustomCache::get($pluginRegistryCacheIdentifier));
+            PluginRegistry::set(CustomCache::get($pluginRegistryCacheIdentifier), true);
         }
 
         foreach (PluginRegistry::list() as $pluginSignature => $pluginData) {

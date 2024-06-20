@@ -17,8 +17,12 @@ class DatabaseModelRegistry
         self::createTableEntryIfNotExistent($tableName);
 
         self::$data[$tableName]['fqcn'] = $fqcn;
-        self::$data[$tableName]['fields'] = [];
-        self::$data[$tableName]['indices'] = $indices;
+        if (!array_key_exists('fields', self::$data[$tableName])) {
+            self::$data[$tableName]['fields'] = [];
+        }
+        if (!array_key_exists('indices', self::$data[$tableName])) {
+            self::$data[$tableName]['indices'] = $indices;
+        }
     }
 
     public static function addOverrideInformation(string $tableName, string $overrideTableName): void

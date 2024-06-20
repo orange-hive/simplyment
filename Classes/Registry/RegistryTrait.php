@@ -8,9 +8,16 @@ trait RegistryTrait
     protected static array $data = [];
 
 
-    public static function set(array $data)
+    public static function set(array $data, bool $add = false)
     {
-        self::$data = $data;
+        if (!$add || empty(self::$data)) {
+            self::$data = $data;
+            return;
+        }
+
+        $tmp = self::$data;
+        \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($tmp, $data);
+        self::$data = $tmp;
     }
 
     public static function list(): array

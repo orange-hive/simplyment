@@ -12,7 +12,6 @@ class DatabaseListener
     public function alterTableDefinitionStatements(AlterTableDefinitionStatementsEvent $event): AlterTableDefinitionStatementsEvent
     {
         $modelsSql = [];
-
         foreach (DatabaseModelRegistry::list() as $tableName => $data) {
             $fieldsSql = '';
             if (array_key_exists('fields', $data)) {
