@@ -2,7 +2,7 @@
     "name": "orange-hive/simplyment",
     "description": "Simplified Development for TYPO3 developers",
     "type": "typo3-cms-extension",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "license": "GPL-2.0-or-later",
     "homepage": "https://technology.orangehive.de",
     "keywords": [

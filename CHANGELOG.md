@@ -1,3 +1,7 @@
+# 1.3.3
+- Bugfix release
+- Cache handling fixed: prepopulate cache properly, add cache clear hook
+
 # 1.3.2
 - Bugfix release
 
