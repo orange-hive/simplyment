@@ -7,6 +7,7 @@ use OrangeHive\Simplyment\Registry\ContentElementRegistry;
 use OrangeHive\Simplyment\Utility\ModelUtility;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
@@ -18,7 +19,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ContentElementPreviewRenderer extends StandardContentPreviewRenderer
 {
-    protected function renderContentElementPreviewFromFluidTemplate(array $row): ?string
+    protected function renderContentElementPreviewFromFluidTemplate(array $row, ?GridColumnItem $item = null): ?string
     {
         $tsConfig = BackendUtility::getPagesTSconfig($row['pid'])['mod.']['web_layout.']['tt_content.']['preview.'] ?? [];
         $fluidTemplateFile = '';
