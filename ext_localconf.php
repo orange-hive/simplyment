@@ -16,7 +16,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1675267771] = [
 // register backend layout hook
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['BackendLayoutDataProvider']['simplyment'] = \OrangeHive\Simplyment\Hook\BackendLayoutDataProvider::class;
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = CacheClearHook::class.'->clearCache';
+//$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = CacheClearHook::class.'->clearCache';
 
 
 if (CustomCache::has(SimplymentExtensionRegistry::CACHE_IDENTIFIER)) {
