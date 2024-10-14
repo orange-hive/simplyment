@@ -57,7 +57,7 @@ class DatabaseListener
 
         $sql = [];
         foreach ($fields as $fieldName => $fieldConfig) {
-            $sql[] = $fieldName . ' ' . $fieldConfig['sql'];
+            $sql[] = '`' . $fieldName . '` ' . $fieldConfig['sql'];
         }
 
         return implode(',' . LF, $sql);
