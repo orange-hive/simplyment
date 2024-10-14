@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = [
             'OrangeHive\\Simplyment\\' => 'Classes/',
         ],
     ],
-    'version' => '1.3.4',
+    'version' => '1.3.5',
     'state' => 'stable',
     'clearCacheOnLoad' => true,
     'author' => 'Stefan Glotzbach',
