@@ -15,6 +15,7 @@ class ModelUtility
         $query = $persistenceManager->createQueryForType($fqcn);
         $settings = $query->getQuerySettings();
         $settings->setRespectStoragePage(false);
+        $settings->setRespectSysLanguage(false);
 
         $query->matching($query->equals('uid', $uid));
 
