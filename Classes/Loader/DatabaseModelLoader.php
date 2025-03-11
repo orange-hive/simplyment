@@ -39,8 +39,7 @@ class DatabaseModelLoader extends AbstractLoader implements LoaderInterface
         $extPath = GeneralUtility::getFileAbsFileName('EXT:' . $extensionKey . '/Classes/Domain/Model');
 
         $files = array_merge(
-            glob($extPath . '/*.php'),
-            glob($extPath . '/Content/*.php')
+            glob($extPath . '/{*,*/*,*/*/*}.php', GLOB_BRACE), // up to 3 levels
         );
         foreach ($files as $file) {
             $fqcn = ClassNameUtility::getFqcnFromPath(vendorName: $vendorName, extensionKey: $extensionKey, path: $file);
